@@ -35,8 +35,15 @@
 import django
 import ldap
 from django.conf import settings
-from django.db.backends import BaseDatabaseFeatures, BaseDatabaseOperations, BaseDatabaseWrapper
-from django.db.backends.creation import BaseDatabaseCreation
+if django.VERSION < (1, 8):
+    from django.db.backends import (BaseDatabaseFeatures, BaseDatabaseOperations,
+                                    BaseDatabaseWrapper)
+    from django.db.backends.creation import BaseDatabaseCreation
+else:
+    from django.db.backends.base.features import BaseDatabaseFeatures
+    from django.db.backends.base.operations import BaseDatabaseOperations
+    from django.db.backends.base.base import BaseDatabaseWrapper
+    from django.db.backends.base.creation import BaseDatabaseCreation
 
 class DatabaseCreation(BaseDatabaseCreation):
     def create_test_db(self, verbosity=1, autoclobber=False):
